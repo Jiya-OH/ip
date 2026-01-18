@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Roberto {
-    public static List<String> list;
+    public static List<Task> taskList;
     public static void printLine(){
         System.out.println("____________________________________________________________");
     }
@@ -15,7 +15,7 @@ public class Roberto {
 
     //Adds input line to list
     public static void addToList(String input) {
-        list.add(input);
+        taskList.add(new Task(input));
         printLine();
         System.out.println(" added: " + input);
         printLine();
@@ -26,9 +26,26 @@ public class Roberto {
         //initialize number for ordering
         int num = 1;
         printLine();
-        for (String line : list){
-            System.out.println(" " + num++ + ". " + line);
+        System.out.println(" Here are the tasks in your list:");
+        for (Task task : taskList){
+            System.out.println(" " + num++ + "." + task);
         }
+        printLine();
+    }
+
+    public static void markTask(Task task){
+        task.markAsDone(true);
+        printLine();
+        System.out.println(" Nice! I've marked this task as done:");
+        System.out.println("  " + task);
+        printLine();
+    }
+
+    public static void unmarkTask(Task task){
+        task.markAsDone(false);
+        printLine();
+        System.out.println(" OK, I've marked this task as not done yet:");
+        System.out.println("  " + task);
         printLine();
     }
 
@@ -42,19 +59,30 @@ public class Roberto {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         //initializes new list
-        list = new ArrayList<>();
+        taskList = new ArrayList<>();
 
         greet();
 
         //Continuously receives input until user inputs "bye"
-        while (true){
+        label:
+        while (true) {
             String input = scanner.nextLine();
-            if (input.equals("bye")){
-                break;
-            } else if (input.equals("list")) {
-                printList();
-            } else {
-                addToList(input);
+            String[] inputsplit = input.split(" ");
+            switch (inputsplit[0]) {
+                case "bye":
+                    break label;
+                case "list":
+                    printList();
+                    break;
+                case "mark":
+                    markTask(taskList.get(Integer.parseInt(inputsplit[1]) - 1));
+                    break;
+                case "unmark":
+                    unmarkTask(taskList.get(Integer.parseInt(inputsplit[1]) - 1));
+                    break;
+                default:
+                    addToList(input);
+                    break;
             }
         }
 
