@@ -16,22 +16,37 @@ public class Roberto {
     //Adds input line to list
     public static void addToList(String input) {
         String[] description = input.split(" ", 2);
+
         Task newTask;
         switch (description[0]) {
             case "todo":
+                if (description.length != 2) {
+                    throw new UnspecifiedTaskException();
+                }
                 newTask = new Todo(description[1]);
                 break;
             case "deadline":
+                if (description.length != 2) {
+                    throw new UnspecifiedTaskException();
+                }
                 String[] descriptionD = description[1].split("/by ");
+                if (descriptionD.length != 2) {
+                    throw new UnspecifiedDateException("Sorry! Date is not specified, ensure that only 1 \"/by\" is included after the name of the task ");
+                }
                 newTask = new Deadline(descriptionD[0], descriptionD[1]);
                 break;
             case "event":
+                if (description.length != 2) {
+                    throw new UnspecifiedTaskException();
+                }
                 String[] descriptionE = description[1].split("/from ");
+                if (descriptionE.length != 2) {
+                    throw new UnspecifiedDateException("Sorry! Date is not specified, ensure that only 1 \"/from\" and 1 \"/to\" is included after the name of the task ");
+                }
                 newTask = new Events(descriptionE[0], descriptionE[1]);
                 break;
             default:
-                newTask = new Task(description[1]);
-                break;
+                throw new UnknownCommandException("Sorry! I don't know what you mean");
         }
         taskList.add(newTask);
         printLine();
@@ -83,26 +98,50 @@ public class Roberto {
 
         greet();
 
+
+
         //Continuously receives input until user inputs "bye"
         label:
         while (true) {
             String input = scanner.nextLine();
             String[] inputsplit = input.split(" ", 2);
-            switch (inputsplit[0]) {
-                case "bye":
-                    break label;
-                case "list":
-                    printList();
-                    break;
-                case "mark":
-                    markTask(taskList.get(Integer.parseInt(inputsplit[1]) - 1));
-                    break;
-                case "unmark":
-                    unmarkTask(taskList.get(Integer.parseInt(inputsplit[1]) - 1));
-                    break;
-                default:
-                    addToList(input);
-                    break;
+            try {
+                switch (inputsplit[0]) {
+                    case "bye":
+                        break label;
+                    case "list":
+                        printList();
+                        break;
+                    case "mark":
+                        int markindex = Integer.parseInt(inputsplit[1]) - 1;
+                        if (markindex < 0 || markindex > taskList.size() - 1){
+                            throw new TaskDoesNotExistException(markindex);
+                        }
+                        markTask(taskList.get(markindex));
+                        break;
+                    case "unmark":
+                        int unmarkindex = Integer.parseInt(inputsplit[1]) - 1;
+                        if (unmarkindex < 0 || unmarkindex > taskList.size() - 1){
+                            throw new TaskDoesNotExistException(unmarkindex);
+                        }
+                        unmarkTask(taskList.get(Integer.parseInt(inputsplit[1]) - 1));
+                        break;
+                    default:
+                        addToList(input);
+                        break;
+                }
+            } catch (NumberFormatException e) {
+                printLine();
+                System.out.println("Sorry! Please input only a number");
+                printLine();
+            } catch (UnknownCommandException e){
+                printLine();
+                System.out.println(e);
+                printLine();
+            } catch (IndexOutOfBoundsException e) {
+                printLine();
+                System.out.println(e);
+                printLine();
             }
         }
 
