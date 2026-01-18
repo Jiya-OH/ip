@@ -75,6 +75,19 @@ public class Roberto {
         System.out.println("  " + task);
         printLine();
     }
+    public static void deleteTask(int index){
+        index -= 1;
+        if (index < 0 || index > taskList.size() - 1){
+            throw new TaskDoesNotExistException(index);
+        }
+
+        printLine();
+        System.out.println("Noted. I've removed this task:");
+        System.out.println(taskList.get(index));
+        taskList.remove(index);
+        System.out.println(" Now you have " + taskList.size() + " tasks in the list.");
+        printLine();
+    }
 
     public static void unmarkTask(Task task){
         task.markAsDone(false);
@@ -125,6 +138,9 @@ public class Roberto {
                             throw new TaskDoesNotExistException(unmarkindex);
                         }
                         unmarkTask(taskList.get(Integer.parseInt(inputsplit[1]) - 1));
+                        break;
+                    case "delete":
+                        deleteTask(Integer.parseInt(inputsplit[1]));
                         break;
                     default:
                         addToList(input);
