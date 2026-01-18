@@ -15,9 +15,29 @@ public class Roberto {
 
     //Adds input line to list
     public static void addToList(String input) {
-        taskList.add(new Task(input));
+        String[] description = input.split(" ", 2);
+        Task newTask;
+        switch (description[0]) {
+            case "todo":
+                newTask = new Todo(description[1]);
+                break;
+            case "deadline":
+                String[] descriptionD = description[1].split("/by ");
+                newTask = new Deadline(descriptionD[0], descriptionD[1]);
+                break;
+            case "event":
+                String[] descriptionE = description[1].split("/from ");
+                newTask = new Events(descriptionE[0], descriptionE[1]);
+                break;
+            default:
+                newTask = new Task(description[1]);
+                break;
+        }
+        taskList.add(newTask);
         printLine();
-        System.out.println(" added: " + input);
+        System.out.println(" Got it. I've added this task:");
+        System.out.println("  " + newTask);
+        System.out.println(" Now you have " + taskList.size() + " tasks in the list.");
         printLine();
     }
 
@@ -67,7 +87,7 @@ public class Roberto {
         label:
         while (true) {
             String input = scanner.nextLine();
-            String[] inputsplit = input.split(" ");
+            String[] inputsplit = input.split(" ", 2);
             switch (inputsplit[0]) {
                 case "bye":
                     break label;
