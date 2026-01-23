@@ -1,7 +1,17 @@
 import java.util.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+import java.util.stream.Stream;
 
 public class Roberto {
     public static List<Task> taskList;
+
+    public static String saveFileString = "./data/taskList.txt";
+    public static Path filePath;
+
     public static void printLine(){
         System.out.println("____________________________________________________________");
     }
@@ -11,6 +21,49 @@ public class Roberto {
         System.out.println(" Hello! I'm Roberto\n" +
                            " What can I do for you?");
         printLine();
+    }
+
+    public static void saveList()  {
+        try {
+            StringBuilder sb = new StringBuilder();
+            for (Task t : taskList) {
+                sb.append(t.encodeTask()).append("\n");
+            }
+            Files.writeString(filePath, sb.toString());
+        } catch (IOException e){
+            System.out.println("Error! Can't save task list to file");
+        }
+    }
+
+    public static void parseTaskLine(String line){
+
+        String[] taskString = line.split("//");
+        boolean isDone = taskString[1].equals("1");
+
+        switch (taskString[0]) {
+            case "T":
+                taskList.add(new Todo(taskString[2], isDone));
+                break;
+            case "D":
+                taskList.add(new Deadline(taskString[2], taskString[3], isDone));
+                break;
+            case "E":
+                taskList.add(new Events(taskString[2], taskString[3], taskString[4], isDone));
+                break;
+            default:
+                System.out.println("Current task parsed is unknown.");
+                break;
+        }
+    }
+
+    public static void loadList() {
+        try (Stream<String> streamTask = Files.lines(filePath)){
+            streamTask.forEach(Roberto::parseTaskLine);
+        } catch (IOException e){
+            System.out.println("Error! File is corrupted, I'll reset the list for you");
+            taskList.clear();
+            saveList();
+        }
     }
 
     //Adds input line to list
@@ -53,6 +106,7 @@ public class Roberto {
         System.out.println(" Got it. I've added this task:");
         System.out.println("  " + newTask);
         System.out.println(" Now you have " + taskList.size() + " tasks in the list.");
+        saveList();
         printLine();
     }
 
@@ -73,8 +127,10 @@ public class Roberto {
         printLine();
         System.out.println(" Nice! I've marked this task as done:");
         System.out.println("  " + task);
+        saveList();
         printLine();
     }
+
     public static void deleteTask(int index){
         index -= 1;
         if (index < 0 || index > taskList.size() - 1){
@@ -86,6 +142,7 @@ public class Roberto {
         System.out.println(taskList.get(index));
         taskList.remove(index);
         System.out.println(" Now you have " + taskList.size() + " tasks in the list.");
+        saveList();
         printLine();
     }
 
@@ -94,6 +151,7 @@ public class Roberto {
         printLine();
         System.out.println(" OK, I've marked this task as not done yet:");
         System.out.println("  " + task);
+        saveList();
         printLine();
     }
 
@@ -108,6 +166,9 @@ public class Roberto {
         Scanner scanner = new Scanner(System.in);
         //initializes new list
         taskList = new ArrayList<>();
+        filePath = Paths.get(saveFileString);
+        if (Files.exists(filePath)) {loadList();}
+
 
         greet();
 
