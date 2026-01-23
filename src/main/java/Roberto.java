@@ -5,12 +5,17 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.util.stream.Stream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Roberto {
     public static List<Task> taskList;
 
     public static String saveFileString = "./data/taskList.txt";
     public static Path filePath;
+
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static void printLine(){
         System.out.println("____________________________________________________________");
@@ -45,16 +50,22 @@ public class Roberto {
                 taskList.add(new Todo(taskString[2], isDone));
                 break;
             case "D":
-                taskList.add(new Deadline(taskString[2], taskString[3], isDone));
+                LocalDate by = LocalDate.parse(taskString[3], formatter);
+                taskList.add(new Deadline(taskString[2], by, isDone));
                 break;
             case "E":
-                taskList.add(new Events(taskString[2], taskString[3], taskString[4], isDone));
+                LocalDate from = LocalDate.parse(taskString[3], formatter);
+                LocalDate to = LocalDate.parse(taskString[4], formatter);
+                taskList.add(new Events(taskString[2], from, to, isDone));
                 break;
             default:
                 System.out.println("Current task parsed is unknown.");
                 break;
         }
     }
+
+
+
 
     public static void loadList() {
         try (Stream<String> streamTask = Files.lines(filePath)){
@@ -63,8 +74,13 @@ public class Roberto {
             System.out.println("Error! File is corrupted, I'll reset the list for you");
             taskList.clear();
             saveList();
+        } catch (DateTimeParseException e) {
+            printLine();
+            System.out.println("Error! File is corrupted, I'll reset the list for you");
+            printLine();
         }
     }
+
 
     //Adds input line to list
     public static void addToList(String input) {
@@ -82,21 +98,22 @@ public class Roberto {
                 if (description.length != 2) {
                     throw new UnspecifiedTaskException();
                 }
-                String[] descriptionD = description[1].split("/by ");
+                String[] descriptionD = description[1].split(" /by ");
                 if (descriptionD.length != 2) {
                     throw new UnspecifiedDateException("Sorry! Date is not specified, ensure that only 1 \"/by\" is included after the name of the task ");
                 }
-                newTask = new Deadline(descriptionD[0], descriptionD[1]);
+                newTask = new Deadline(descriptionD[0], LocalDate.parse(descriptionD[1], formatter));
                 break;
             case "event":
                 if (description.length != 2) {
                     throw new UnspecifiedTaskException();
                 }
-                String[] descriptionE = description[1].split("/from ");
-                if (descriptionE.length != 2) {
+                String[] descriptionE = description[1].split(" /from ");
+                String[] date = descriptionE[1].split(" /to ");
+                if (descriptionE.length != 2 || date.length != 2) {
                     throw new UnspecifiedDateException("Sorry! Date is not specified, ensure that only 1 \"/from\" and 1 \"/to\" is included after the name of the task ");
                 }
-                newTask = new Events(descriptionE[0], descriptionE[1]);
+                newTask = new Events(descriptionE[0], LocalDate.parse(date[0],formatter), LocalDate.parse(date[1], formatter));
                 break;
             default:
                 throw new UnknownCommandException("Sorry! I don't know what you mean");
@@ -218,6 +235,10 @@ public class Roberto {
             } catch (IndexOutOfBoundsException e) {
                 printLine();
                 System.out.println(e);
+                printLine();
+            } catch (DateTimeParseException e) {
+                printLine();
+                System.out.println("Error parsing date, please use format yyyy-MM-dd");
                 printLine();
             }
         }
