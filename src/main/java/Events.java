@@ -1,28 +1,35 @@
-public class Events extends Task{
-    private String from;
-    private String to;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
-    public Events(String description, String date){
+public class Events extends Task{
+    private LocalDate from;
+    private LocalDate to;
+
+
+    public Events(String description, LocalDate from, LocalDate to){
         super(description);
-        String[] interval = date.split("/to ");
-        this.from = interval[0];
-        this.to = interval[1];
+        this.from = from;
+        this.to = to;
     }
 
-    public Events(String description, String from, String to, boolean isDone) {
+    public Events(String description, LocalDate from, LocalDate to, boolean isDone) {
         super(description);
         this.from = from;
         this.to = to;
         super.isDone = isDone;
     }
 
+
     @Override
     public String toString(){
-        return "[E]" + super.toString() + "(from: " + from + "to: " + to + ")";
+        String fromLine = from.format(DateTimeFormatter.ofPattern("MMM dd yyyy"));
+        String toLine = to.format(DateTimeFormatter.ofPattern("MMM dd yyyy"));
+        return "[E]" + super.toString() + " (from: " + fromLine + " to: " + toLine + ")";
     }
 
     @Override
     public String encodeTask() {
-        return "E" + super.encodeTask() + "//" + from + "//" + to;
+        return "E" + super.encodeTask() + "//" + from.toString() + "//" + to.toString();
     }
 }
