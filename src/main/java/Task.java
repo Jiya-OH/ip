@@ -11,6 +11,11 @@ public class Task {
         return (isDone ? "X" : " "); // mark done task with X
     }
 
+    public String encodeTask() {
+        int isDone = this.isDone ? 1 : 0;
+        return "//" + isDone + "//" + description;
+    }
+
     public void markAsDone(boolean status){
         isDone = status;
     }
