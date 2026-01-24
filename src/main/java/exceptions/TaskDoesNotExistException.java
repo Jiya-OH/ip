@@ -1,3 +1,5 @@
+package exceptions;
+
 public class TaskDoesNotExistException extends RobertoException {
     private int num;
     public TaskDoesNotExistException(int num) {
@@ -7,6 +9,6 @@ public class TaskDoesNotExistException extends RobertoException {
 
     @Override
     public String getMessage() {
-        return "Sorry! Task " + num + " does not exist, choose another index";
+        return "Sorry! task.Task " + num + " does not exist, choose another index";
     }
 }

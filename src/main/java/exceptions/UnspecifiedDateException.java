@@ -1,3 +1,5 @@
+package exceptions;
+
 public class UnspecifiedDateException extends RobertoException {
     private String message;
     public UnspecifiedDateException(String message) {

@@ -1,3 +1,5 @@
+package exceptions;
+
 public class UnspecifiedTaskException extends RobertoException {
 
     public UnspecifiedTaskException() {
