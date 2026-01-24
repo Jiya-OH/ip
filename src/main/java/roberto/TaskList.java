@@ -1,5 +1,6 @@
 package roberto;
 
+import exceptions.TaskDoesNotExistException;
 import task.Task;
 
 import java.util.*;
@@ -29,7 +30,10 @@ public class TaskList {
     }
 
     public void deleteTask(Task task){
-        taskList.remove(task);
+        boolean removeBool = taskList.remove(task);
+        if (!removeBool) {
+            throw new TaskDoesNotExistException(0);
+        }
     }
 
     public void markTask(Task task){
