@@ -1,248 +1,80 @@
-import java.util.*;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.Path;
-import java.util.stream.Stream;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.nio.file.*;
 import java.time.format.DateTimeParseException;
 
 public class Roberto {
-    public static List<Task> taskList;
+    private TaskList tasks;
+    private final Ui ui;
+    private final Storage storage;
 
-    public static String saveFileString = "./data/taskList.txt";
-    public static Path filePath;
 
-    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public static void printLine(){
-        System.out.println("____________________________________________________________");
-    }
-
-    public static void greet(){
-        printLine();
-        System.out.println(" Hello! I'm Roberto\n" +
-                           " What can I do for you?");
-        printLine();
-    }
-
-    public static void saveList()  {
+    public Roberto(String filePath){
+        ui = new Ui();
+        storage = new Storage(filePath);
         try {
-            StringBuilder sb = new StringBuilder();
-            for (Task t : taskList) {
-                sb.append(t.encodeTask()).append("\n");
-            }
-            Files.writeString(filePath, sb.toString());
-        } catch (IOException e){
-            System.out.println("Error! Can't save task list to file");
+            tasks = new TaskList(storage.loadList());
+        } catch (IOException | RobertoException e) {
+            ui.showLoadingError();
+            tasks = new TaskList();
         }
     }
 
-    public static void parseTaskLine(String line){
+    public void run(){
 
-        String[] taskString = line.split("//");
-        boolean isDone = taskString[1].equals("1");
+        ui.greet();
+        boolean isExit = false;
 
-        switch (taskString[0]) {
-            case "T":
-                taskList.add(new Todo(taskString[2], isDone));
-                break;
-            case "D":
-                LocalDate by = LocalDate.parse(taskString[3], formatter);
-                taskList.add(new Deadline(taskString[2], by, isDone));
-                break;
-            case "E":
-                LocalDate from = LocalDate.parse(taskString[3], formatter);
-                LocalDate to = LocalDate.parse(taskString[4], formatter);
-                taskList.add(new Events(taskString[2], from, to, isDone));
-                break;
-            default:
-                System.out.println("Current task parsed is unknown.");
-                break;
-        }
-    }
-
-
-
-
-    public static void loadList() {
-        try (Stream<String> streamTask = Files.lines(filePath)){
-            streamTask.forEach(Roberto::parseTaskLine);
-        } catch (IOException e){
-            System.out.println("Error! File is corrupted, I'll reset the list for you");
-            taskList.clear();
-            saveList();
-        } catch (DateTimeParseException e) {
-            printLine();
-            System.out.println("Error! File is corrupted, I'll reset the list for you");
-            printLine();
-        }
-    }
-
-
-    //Adds input line to list
-    public static void addToList(String input) {
-        String[] description = input.split(" ", 2);
-
-        Task newTask;
-        switch (description[0]) {
-            case "todo":
-                if (description.length != 2) {
-                    throw new UnspecifiedTaskException();
-                }
-                newTask = new Todo(description[1]);
-                break;
-            case "deadline":
-                if (description.length != 2) {
-                    throw new UnspecifiedTaskException();
-                }
-                String[] descriptionD = description[1].split(" /by ");
-                if (descriptionD.length != 2) {
-                    throw new UnspecifiedDateException("Sorry! Date is not specified, ensure that only 1 \"/by\" is included after the name of the task ");
-                }
-                newTask = new Deadline(descriptionD[0], LocalDate.parse(descriptionD[1], formatter));
-                break;
-            case "event":
-                if (description.length != 2) {
-                    throw new UnspecifiedTaskException();
-                }
-                String[] descriptionE = description[1].split(" /from ");
-                String[] date = descriptionE[1].split(" /to ");
-                if (descriptionE.length != 2 || date.length != 2) {
-                    throw new UnspecifiedDateException("Sorry! Date is not specified, ensure that only 1 \"/from\" and 1 \"/to\" is included after the name of the task ");
-                }
-                newTask = new Events(descriptionE[0], LocalDate.parse(date[0],formatter), LocalDate.parse(date[1], formatter));
-                break;
-            default:
-                throw new UnknownCommandException("Sorry! I don't know what you mean");
-        }
-        taskList.add(newTask);
-        printLine();
-        System.out.println(" Got it. I've added this task:");
-        System.out.println("  " + newTask);
-        System.out.println(" Now you have " + taskList.size() + " tasks in the list.");
-        saveList();
-        printLine();
-    }
-
-    //Prints the whole list
-    public static void printList(){
-        //initialize number for ordering
-        int num = 1;
-        printLine();
-        System.out.println(" Here are the tasks in your list:");
-        for (Task task : taskList){
-            System.out.println(" " + num++ + "." + task);
-        }
-        printLine();
-    }
-
-    public static void markTask(Task task){
-        task.markAsDone(true);
-        printLine();
-        System.out.println(" Nice! I've marked this task as done:");
-        System.out.println("  " + task);
-        saveList();
-        printLine();
-    }
-
-    public static void deleteTask(int index){
-        index -= 1;
-        if (index < 0 || index > taskList.size() - 1){
-            throw new TaskDoesNotExistException(index);
-        }
-
-        printLine();
-        System.out.println("Noted. I've removed this task:");
-        System.out.println(taskList.get(index));
-        taskList.remove(index);
-        System.out.println(" Now you have " + taskList.size() + " tasks in the list.");
-        saveList();
-        printLine();
-    }
-
-    public static void unmarkTask(Task task){
-        task.markAsDone(false);
-        printLine();
-        System.out.println(" OK, I've marked this task as not done yet:");
-        System.out.println("  " + task);
-        saveList();
-        printLine();
-    }
-
-    public static void exit(){
-        printLine();
-        System.out.println(" Bye. Hope to see you again soon!");
-        printLine();
-
-    }
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        //initializes new list
-        taskList = new ArrayList<>();
-        filePath = Paths.get(saveFileString);
-        if (Files.exists(filePath)) {loadList();}
-
-
-        greet();
-
-
-
-        //Continuously receives input until user inputs "bye"
-        label:
-        while (true) {
-            String input = scanner.nextLine();
-            String[] inputsplit = input.split(" ", 2);
+        while (!isExit) {
+            String input = ui.readCommand();
+            String[] inputSplit = input.split(" ", 2);
             try {
-                switch (inputsplit[0]) {
+                switch (inputSplit[0]) {
                     case "bye":
-                        break label;
+                        isExit = true;
+                        break;
                     case "list":
-                        printList();
+                        ui.printList(tasks);
                         break;
                     case "mark":
-                        int markindex = Integer.parseInt(inputsplit[1]) - 1;
-                        if (markindex < 0 || markindex > taskList.size() - 1){
-                            throw new TaskDoesNotExistException(markindex);
-                        }
-                        markTask(taskList.get(markindex));
+                        int markIndex = Integer.parseInt(inputSplit[1]) - 1;
+                        Task taskToMark = Parser.parseTaskIndex(markIndex, tasks);
+                        tasks.markTask(taskToMark);
+                        ui.markMessage(taskToMark);
                         break;
                     case "unmark":
-                        int unmarkindex = Integer.parseInt(inputsplit[1]) - 1;
-                        if (unmarkindex < 0 || unmarkindex > taskList.size() - 1){
-                            throw new TaskDoesNotExistException(unmarkindex);
-                        }
-                        unmarkTask(taskList.get(Integer.parseInt(inputsplit[1]) - 1));
+                        int unmarkIndex = Integer.parseInt(inputSplit[1]) - 1;
+                        Task taskToUnmark = Parser.parseTaskIndex(unmarkIndex, tasks);
+                        tasks.unmarkTask(taskToUnmark);
+                        ui.unmarkMessage(taskToUnmark);
                         break;
                     case "delete":
-                        deleteTask(Integer.parseInt(inputsplit[1]));
+                        int index = Integer.parseInt(inputSplit[1]) - 1;
+                        Task taskToDelete = Parser.parseTaskIndex(index, tasks);
+                        tasks.deleteTask(taskToDelete);
+                        ui.deleteMessage(taskToDelete, tasks.getSize());
                         break;
                     default:
-                        addToList(input);
+                        Task taskToAdd = Parser.parseTaskCommand(input);
+                        tasks.addToList(taskToAdd);
+                        ui.addMessage(taskToAdd, tasks.getSize());
                         break;
                 }
             } catch (NumberFormatException e) {
-                printLine();
-                System.out.println("Sorry! Please input only a number");
-                printLine();
-            } catch (UnknownCommandException e){
-                printLine();
-                System.out.println(e);
-                printLine();
-            } catch (IndexOutOfBoundsException e) {
-                printLine();
-                System.out.println(e);
-                printLine();
-            } catch (DateTimeParseException e) {
-                printLine();
-                System.out.println("Error parsing date, please use format yyyy-MM-dd");
-                printLine();
+                ui.showError("Sorry! Please input only a number");
+            } catch (RobertoException e){
+                ui.showError(e.getMessage());
+            } catch (DateTimeParseException e){
+                ui.showError("Sorry! Wrong date input, please enter in format YYYY-MM-DD");
+            } finally {
+                storage.saveList(tasks);
             }
         }
+        ui.exit();
+    }
 
-        exit();
+
+    public static void main(String[] args) {
+        new Roberto("data/taskList.txt").run();
     }
 }

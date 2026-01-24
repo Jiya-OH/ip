@@ -1,9 +1,10 @@
-public class UnknownCommandException extends RuntimeException {
-    public UnknownCommandException(String message) {
-        super(message);
+public class UnknownCommandException extends RobertoException {
+    public UnknownCommandException() {
+        super();
     }
+
     @Override
-    public String toString(){
+    public String getMessage(){
         return "Sorry! This command does not exist, please try again";
     }
 

@@ -1,12 +1,12 @@
-public class UnspecifiedDateException extends IndexOutOfBoundsException {
+public class UnspecifiedDateException extends RobertoException {
     private String message;
     public UnspecifiedDateException(String message) {
-        super(message);
+        super();
         this.message = message;
     }
 
     @Override
-    public String toString(){
+    public String getMessage(){
         return message;
     }
 }
