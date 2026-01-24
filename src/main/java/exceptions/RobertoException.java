@@ -1,3 +1,5 @@
+package exceptions;
+
 public class RobertoException extends RuntimeException {
     public RobertoException() {
         super();
@@ -7,6 +9,6 @@ public class RobertoException extends RuntimeException {
     }
 
     public String getMessage() {
-        return "Roberto encountered an exception, please try again!";
+        return "roberto.Roberto encountered an exception, please try again!";
     }
 }

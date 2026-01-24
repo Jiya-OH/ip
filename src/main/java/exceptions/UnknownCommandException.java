@@ -1,3 +1,5 @@
+package exceptions;
+
 public class UnknownCommandException extends RobertoException {
     public UnknownCommandException() {
         super();
