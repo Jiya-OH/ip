@@ -79,6 +79,6 @@ public class Roberto {
 
 
     public static void main(String[] args) {
-        new Roberto("data/taskList.txt").run();
+        new Roberto("taskList.txt").run();
     }
 }

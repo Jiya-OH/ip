@@ -13,7 +13,13 @@ public class Storage {
     private Path pathFile;
 
     public Storage(String saveFileString) {
-        this.pathFile = Paths.get(saveFileString);
+        Path dataDirectory = Paths.get("data");
+        try {
+            Files.createDirectories(dataDirectory);
+        } catch (IOException e){
+            System.err.println("Failed to create directory: " + e.getMessage());
+        }
+        this.pathFile = Paths.get("data/" + saveFileString);
     }
 
 
