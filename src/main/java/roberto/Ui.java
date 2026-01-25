@@ -87,4 +87,17 @@ public class Ui {
         printLine();
     }
 
+    public void findList(String search, List<Task> taskList) {
+        int num = 1;
+        printLine();
+        System.out.println("Here are the matching tasks in your list:");
+        for (Task task: taskList) {
+            if (task.getDescription().contains(search)){
+                System.out.println(" " + num + "." + task);
+            }
+            num++;
+        }
+        printLine();
+    }
+
 }

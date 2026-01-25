@@ -1,6 +1,7 @@
 package roberto;
 
 import exceptions.RobertoException;
+import exceptions.UnspecifiedTaskException;
 import task.Task;
 
 import java.io.IOException;
@@ -57,6 +58,12 @@ public class Roberto {
                         Task taskToDelete = Parser.parseTaskIndex(index, tasks);
                         tasks.deleteTask(taskToDelete);
                         ui.deleteMessage(taskToDelete, tasks.getSize());
+                        break;
+                    case "find":
+                        if (inputSplit.length != 2) {
+                            throw new UnspecifiedTaskException();
+                        }
+                        ui.findList(inputSplit[1], tasks.getTaskList());
                         break;
                     default:
                         Task taskToAdd = Parser.parseTaskCommand(input);
