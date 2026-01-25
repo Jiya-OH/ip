@@ -1,13 +1,22 @@
 package task;
 
 public class Todo extends Task {
+
+    /**
+     * Simple constructor for Todo that takes in description
+     * @param description name of the task
+     */
     public Todo(String description){
         super(description);
     }
 
+    /**
+     * Simple constructor for Todo that takes in description and boolean value isDone
+     * @param description name of the task
+     * @param isDone bool value to set isDone value
+     */
     public Todo(String description, boolean isDone) {
-        super(description);
-        super.isDone = isDone;
+        super(description, isDone);
     }
 
     @Override
