@@ -17,6 +17,11 @@ public class Parser {
 
     public Parser(){}
 
+    /**
+     * Converts line from save file into a task
+     * @param line string to be parsed
+     * @return a new task
+     */
     public static Task parseTaskLine(String line){
         Task newTask;
         String[] taskString = line.split("//");
@@ -41,6 +46,12 @@ public class Parser {
         return newTask;
     }
 
+    /**
+     * Converts an index based on the list of tasks into a task if it exists
+     * @param index index for task list
+     * @param t the list of tasks
+     * @return a new task
+     */
     public static Task parseTaskIndex(int index, TaskList t){
         if (index < 0 || index > t.getTaskList().size() - 1){
             throw new TaskDoesNotExistException(index);
@@ -48,6 +59,11 @@ public class Parser {
         return t.getTaskList().get(index);
     }
 
+    /**
+     * Converts user input into a task
+     * @param input command as string
+     * @return a new task
+     */
     public static Task parseTaskCommand(String input){
         String[] description = input.split(" ", 2);
 
@@ -86,6 +102,11 @@ public class Parser {
         return newTask;
     }
 
+    /**
+     * Converts string into local date
+     * @param dateString string to be parsed
+     * @return a LocalDate
+     */
     public static LocalDate parseLocalDate(String dateString){
         return LocalDate.parse(dateString, formatter);
     }

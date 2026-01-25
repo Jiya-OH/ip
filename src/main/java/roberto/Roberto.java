@@ -12,7 +12,10 @@ public class Roberto {
     private final Storage storage;
 
 
-
+    /**
+     * Simple constructor for Roberto, takes in a string as file path to save
+     * @param filePath name of the file to save to
+     */
     public Roberto(String filePath){
         ui = new Ui();
         storage = new Storage(filePath);
@@ -24,6 +27,9 @@ public class Roberto {
         }
     }
 
+    /**
+     * Controls the flow of the program based on the user inputs
+     */
     public void run(){
 
         ui.greet();
@@ -76,7 +82,6 @@ public class Roberto {
         }
         ui.exit();
     }
-
 
     public static void main(String[] args) {
         new Roberto("taskList.txt").run();

@@ -8,27 +8,50 @@ import java.util.*;
 public class TaskList {
     private List<Task> taskList;
 
+
+    /**
+     * Simple constructor for TaskList
+     */
     public TaskList(){
         taskList = new ArrayList<>();
     }
 
+    /**
+     * Simple constructor for TaskList that takes in List</Task>
+     * @param taskList list of tasks to be added in
+     */
     public TaskList(List<Task> taskList){
         this.taskList = taskList;
     }
 
+    /**
+     * Gets private field taskList
+     * @return Current instance's list of task
+     */
     public List<Task> getTaskList() {
         return taskList;
     }
 
+    /**
+     * Returns size of private field taskList
+     * @return Current instance's list of task size in integer
+     */
     public int getSize(){
         return taskList.size();
     }
 
-    //Adds input line to list
+    /**
+     * Adds a new task to the private field taskList
+     * @param newTask task to be added
+     */
     public void addToList(Task newTask) {
         taskList.add(newTask);
     }
 
+    /**
+     * Removes a task from the private field list if it exists
+     * @param task task to be deleted
+     */
     public void deleteTask(Task task){
         boolean removeBool = taskList.remove(task);
         if (!removeBool) {

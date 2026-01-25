@@ -12,6 +12,11 @@ import java.util.stream.Stream;
 public class Storage {
     private Path pathFile;
 
+    /**
+     * Constructor for Storage that takes in a string value as file to be written to.
+     * Creates a folder data within the same directory if it does not exist yet.
+     * @param saveFileString name of the file to write to
+     */
     public Storage(String saveFileString) {
         Path dataDirectory = Paths.get("data");
         try {
@@ -22,7 +27,11 @@ public class Storage {
         this.pathFile = Paths.get("data/" + saveFileString);
     }
 
-
+    /**
+     * Takes in a list of tasks to encode and write into the save file.
+     * Makes use of stringbuilder.
+     * @param tasks list of tasks to write into the save file
+     */
     public void saveList(TaskList tasks)  {
         try {
             StringBuilder sb = new StringBuilder();
@@ -35,6 +44,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Reads strings from the save file and parses them into a list of task
+     * @return List of tasks
+     * @throws IOException
+     */
     public List<Task> loadList() throws IOException{
         if (!Files.exists(pathFile)) {throw new FileNotFoundException();}
         List<Task> newList = new ArrayList<>();
