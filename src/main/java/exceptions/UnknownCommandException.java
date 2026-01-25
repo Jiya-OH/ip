@@ -6,7 +6,7 @@ public class UnknownCommandException extends RobertoException {
     }
 
     @Override
-    public String getMessage(){
+    public String getMessage() {
         return "Sorry! This command does not exist, please try again";
     }
 

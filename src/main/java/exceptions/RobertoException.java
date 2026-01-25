@@ -4,6 +4,7 @@ public class RobertoException extends RuntimeException {
     public RobertoException() {
         super();
     }
+
     public RobertoException(String message) {
         super(message);
     }

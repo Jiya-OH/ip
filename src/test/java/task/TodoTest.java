@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TodoTest {
 
     @Test
-    public void testTodoWithValidValues(){
+    public void testTodoWithValidValues() {
         Task testTodo = new Todo("Testing");
         assertEquals("Testing", testTodo.description, "Description should be Testing");
         assertEquals(false, testTodo.isDone, "isDone should be false");
@@ -18,8 +18,6 @@ public class TodoTest {
         Task testTodo = new Todo("Testing");
         assertEquals("T//0//Testing", testTodo.encodeTask());
     }
-
-
 
 
 }

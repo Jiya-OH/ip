@@ -16,27 +16,29 @@ public class Storage {
         Path dataDirectory = Paths.get("data");
         try {
             Files.createDirectories(dataDirectory);
-        } catch (IOException e){
+        } catch (IOException e) {
             System.err.println("Failed to create directory: " + e.getMessage());
         }
         this.pathFile = Paths.get("data/" + saveFileString);
     }
 
 
-    public void saveList(TaskList tasks)  {
+    public void saveList(TaskList tasks) {
         try {
             StringBuilder sb = new StringBuilder();
             for (Task t : tasks.getTaskList()) {
                 sb.append(t.encodeTask()).append("\n");
             }
             Files.writeString(pathFile, sb.toString());
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("Error! Can't save task list to file");
         }
     }
 
-    public List<Task> loadList() throws IOException{
-        if (!Files.exists(pathFile)) {throw new FileNotFoundException();}
+    public List<Task> loadList() throws IOException {
+        if (!Files.exists(pathFile)) {
+            throw new FileNotFoundException();
+        }
         List<Task> newList = new ArrayList<>();
         try (Stream<String> streamTask = Files.lines(pathFile)) {
             streamTask.forEach(line -> newList.add(Parser.parseTaskLine(line)));

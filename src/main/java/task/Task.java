@@ -18,11 +18,12 @@ public class Task {
         return "//" + isDone + "//" + description;
     }
 
-    public void markAsDone(boolean status){
+    public void markAsDone(boolean status) {
         isDone = status;
     }
+
     @Override
-    public String toString(){
+    public String toString() {
         return "[" + getStatusIcon() + "] " + description;
     }
 }

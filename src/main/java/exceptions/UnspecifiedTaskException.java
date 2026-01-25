@@ -7,7 +7,7 @@ public class UnspecifiedTaskException extends RobertoException {
     }
 
     @Override
-    public String getMessage(){
+    public String getMessage() {
         return "Sorry! Name of the task is not specified, please try again";
     }
 }
