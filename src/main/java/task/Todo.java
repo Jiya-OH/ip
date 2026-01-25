@@ -6,7 +6,7 @@ public class Todo extends Task {
      * Simple constructor for Todo that takes in description
      * @param description name of the task
      */
-    public Todo(String description){
+    public Todo(String description) {
         super(description);
     }
 
@@ -20,7 +20,7 @@ public class Todo extends Task {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "[T]" + super.toString();
     }
 

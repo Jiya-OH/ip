@@ -45,11 +45,12 @@ public class Task {
      * Marks a task as unmarked or marked
      * @param status true as marked, false as unmarked
      */
-    public void markAsDone(boolean status){
+    public void markAsDone(boolean status) {
         isDone = status;
     }
+
     @Override
-    public String toString(){
+    public String toString() {
         return "[" + getStatusIcon() + "] " + description;
     }
 }

@@ -12,7 +12,7 @@ public class TaskList {
     /**
      * Simple constructor for TaskList
      */
-    public TaskList(){
+    public TaskList() {
         taskList = new ArrayList<>();
     }
 
@@ -20,7 +20,7 @@ public class TaskList {
      * Simple constructor for TaskList that takes in List</Task>
      * @param taskList list of tasks to be added in
      */
-    public TaskList(List<Task> taskList){
+    public TaskList(List<Task> taskList) {
         this.taskList = taskList;
     }
 
@@ -36,7 +36,7 @@ public class TaskList {
      * Returns size of private field taskList
      * @return Current instance's list of task size in integer
      */
-    public int getSize(){
+    public int getSize() {
         return taskList.size();
     }
 
@@ -52,18 +52,18 @@ public class TaskList {
      * Removes a task from the private field list if it exists
      * @param task task to be deleted
      */
-    public void deleteTask(Task task){
+    public void deleteTask(Task task) {
         boolean removeBool = taskList.remove(task);
         if (!removeBool) {
             throw new TaskDoesNotExistException(0);
         }
     }
 
-    public void markTask(Task task){
+    public void markTask(Task task) {
         task.markAsDone(true);
     }
 
-    public void unmarkTask(Task task){
+    public void unmarkTask(Task task) {
         task.markAsDone(false);
     }
 

@@ -2,6 +2,7 @@ package exceptions;
 
 public class TaskDoesNotExistException extends RobertoException {
     private int num;
+
     public TaskDoesNotExistException(int num) {
         super();
         this.num = num + 1;

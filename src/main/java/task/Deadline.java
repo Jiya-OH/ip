@@ -11,7 +11,7 @@ public class Deadline extends Task {
      * @param description name of the task
      * @param by localdate value as deadline
      */
-    public Deadline(String description, LocalDate by){
+    public Deadline(String description, LocalDate by) {
         super(description);
         this.by = by;
     }
@@ -23,16 +23,14 @@ public class Deadline extends Task {
      * @param by localdate value as deadline
      * @param isDone bool value to set isDone value
      */
-    public Deadline(String description, LocalDate by, boolean isDone){
+    public Deadline(String description, LocalDate by, boolean isDone) {
         super(description, isDone);
         this.by = by;
     }
 
 
-
-
     @Override
-    public String toString(){
+    public String toString() {
         String byLine = by.format(DateTimeFormatter.ofPattern("MMM dd yyyy"));
         return "[D]" + super.toString() + " (by: " + byLine + ")";
     }

@@ -10,21 +10,21 @@ public class Ui {
     /**
      * Simple constructor for the Ui
      */
-    public Ui(){
-        scanner = new Scanner(System.in);;
-    };
+    public Ui() {
+        scanner = new Scanner(System.in);
+    }
 
     /**
      * Generates a divider between communication
      */
-    public void printLine(){
+    public void printLine() {
         System.out.println("____________________________________________________________");
     }
 
     /**
      * Introduction upon running the program
      */
-    public void greet(){
+    public void greet() {
         printLine();
         System.out.println(" Hello! I'm Roberto\n" +
                 " What can I do for you?");
@@ -34,7 +34,7 @@ public class Ui {
     /**
      * Send off message upon exiting the program
      */
-    public void exit(){
+    public void exit() {
         printLine();
         System.out.println(" Bye. Hope to see you again soon!");
         printLine();
@@ -45,7 +45,7 @@ public class Ui {
      * Reads user input
      * @return Command as string
      */
-    public String readCommand(){
+    public String readCommand() {
         return scanner.nextLine();
     }
 
@@ -58,7 +58,7 @@ public class Ui {
         int num = 1;
         printLine();
         System.out.println(" Here are the tasks in your list:");
-        for (Task task : t.getTaskList()){
+        for (Task task : t.getTaskList()) {
             System.out.println(" " + num++ + "." + task);
         }
         printLine();
@@ -68,7 +68,7 @@ public class Ui {
      * Prints out the error messages
      * @param message error message
      */
-    public void showError(String message){
+    public void showError(String message) {
         printLine();
         System.out.println(message);
         printLine();
@@ -77,7 +77,7 @@ public class Ui {
     /**
      * Prints the loading error message if file is either missing or corrupted
      */
-    public void showLoadingError(){
+    public void showLoadingError() {
         printLine();
         System.out.println("File either does not exist or is corrupted, generated new file for you!");
         printLine();
