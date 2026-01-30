@@ -3,6 +3,9 @@ package task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * public class event that inherits from task
+ */
 public class Events extends Task {
     private LocalDate from;
     private LocalDate to;

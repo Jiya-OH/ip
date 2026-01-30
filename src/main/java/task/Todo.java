@@ -1,5 +1,8 @@
 package task;
 
+/**
+ * public class todo that inherits from task
+ */
 public class Todo extends Task {
 
     /**

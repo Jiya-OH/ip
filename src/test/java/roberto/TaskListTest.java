@@ -1,14 +1,18 @@
 package roberto;
 
-import exceptions.TaskDoesNotExistException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import exceptions.TaskDoesNotExistException;
 import task.Task;
 import task.Todo;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
+
+
+
 
 public class TaskListTest {
     @Test

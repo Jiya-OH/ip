@@ -1,14 +1,20 @@
 package roberto;
 
-import task.Task;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import task.Task;
+
+
+/**
+ * Public class storage to store task lists into file
+ */
 public class Storage {
     private Path pathFile;
 

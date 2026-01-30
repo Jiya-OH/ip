@@ -1,10 +1,15 @@
 package roberto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import exceptions.TaskDoesNotExistException;
 import task.Task;
 
-import java.util.*;
 
+/**
+ * public class TaskList to store list of tasks
+ */
 public class TaskList {
     private List<Task> taskList;
 
@@ -17,7 +22,7 @@ public class TaskList {
     }
 
     /**
-     * Simple constructor for TaskList that takes in List</Task>
+     * Simple constructor for TaskList that takes in List of tasks
      * @param taskList list of tasks to be added in
      */
     public TaskList(List<Task> taskList) {

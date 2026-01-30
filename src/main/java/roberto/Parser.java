@@ -1,5 +1,8 @@
 package roberto;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import exceptions.TaskDoesNotExistException;
 import exceptions.UnknownCommandException;
 import exceptions.UnspecifiedDateException;
@@ -9,11 +12,13 @@ import task.Events;
 import task.Task;
 import task.Todo;
 
-import java.time.LocalDate;
-import java.time.format.*;
 
+
+/**
+ * Public class for parser, to parse strings into various class instances
+ */
 public class Parser {
-    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public Parser() {
     }
@@ -82,7 +87,8 @@ public class Parser {
             }
             String[] descriptionD = description[1].split(" /by ");
             if (descriptionD.length != 2) {
-                throw new UnspecifiedDateException("Sorry! Date is not specified, ensure that only 1 \"/by\" is included after the name of the task ");
+                throw new UnspecifiedDateException("Sorry! Date is not specified, "
+                        + "ensure that only 1 \"/by\" is included after the name of the task ");
             }
             newTask = new Deadline(descriptionD[0], parseLocalDate(descriptionD[1]));
             break;
@@ -93,7 +99,8 @@ public class Parser {
             String[] descriptionE = description[1].split(" /from ");
             String[] date = descriptionE[1].split(" /to ");
             if (descriptionE.length != 2 || date.length != 2) {
-                throw new UnspecifiedDateException("Sorry! Date is not specified, ensure that only 1 \"/from\" and 1 \"/to\" is included after the name of the task ");
+                throw new UnspecifiedDateException("Sorry! Date is not specified, "
+                        + "ensure that only 1 \"/from\" and 1 \"/to\" is included after the name of the task ");
             }
             newTask = new Events(descriptionE[0], parseLocalDate(date[0]), parseLocalDate(date[1]));
             break;

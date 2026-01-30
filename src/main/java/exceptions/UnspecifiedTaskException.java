@@ -1,5 +1,8 @@
 package exceptions;
 
+/**
+ * public class that inherits from robertoexception
+ */
 public class UnspecifiedTaskException extends RobertoException {
 
     public UnspecifiedTaskException() {
