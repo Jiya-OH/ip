@@ -1,5 +1,8 @@
 package exceptions;
 
+/**
+ * public class that inherits from runtimeexception
+ */
 public class RobertoException extends RuntimeException {
     public RobertoException() {
         super();

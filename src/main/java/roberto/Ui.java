@@ -1,9 +1,13 @@
 package roberto;
 
+import java.util.List;
+import java.util.Scanner;
+
 import task.Task;
 
-import java.util.*;
-
+/**
+ * public class Ui for user interface
+ */
 public class Ui {
     private Scanner scanner;
 
@@ -26,8 +30,8 @@ public class Ui {
      */
     public void greet() {
         printLine();
-        System.out.println(" Hello! I'm Roberto\n" +
-                " What can I do for you?");
+        System.out.println(" Hello! I'm Roberto\n"
+                + " What can I do for you?");
         printLine();
     }
 
@@ -53,7 +57,7 @@ public class Ui {
      * Takes in a list of task to print
      * @param t list of tasks
      */
-    public void printList(TaskList t){
+    public void printList(TaskList t) {
         //initialize number for ordering
         int num = 1;
         printLine();
@@ -131,12 +135,17 @@ public class Ui {
         printLine();
     }
 
+    /**
+     * Finds list of tasks that match search keyword
+     * @param search keyword to find tasks
+     * @param taskList whoe list of tasks
+     */
     public void findList(String search, List<Task> taskList) {
         int num = 1;
         printLine();
         System.out.println("Here are the matching tasks in your list:");
         for (Task task: taskList) {
-            if (task.getDescription().contains(search)){
+            if (task.getDescription().contains(search)) {
                 System.out.println(" " + num + "." + task);
             }
             num++;
