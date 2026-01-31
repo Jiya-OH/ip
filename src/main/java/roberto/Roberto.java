@@ -23,8 +23,8 @@ public class Roberto {
      *
      * @param filePath name of the file to save to
      */
-    public Roberto(String filePath) {
-        ui = new Ui();
+    public Roberto(String filePath, MainWindow newWindow) {
+        ui = new Ui(newWindow);
         storage = new Storage(filePath);
         try {
             tasks = new TaskList(storage.loadList());
@@ -34,69 +34,69 @@ public class Roberto {
         }
     }
 
-    /**
-     * Controls the flow of the program based on the user inputs
-     */
-    public void run() {
-
+    public void robertoGreet() {
         ui.greet();
-        boolean isExit = false;
+    }
 
-        while (!isExit) {
-            String input = ui.readCommand();
-            String[] inputSplit = input.split(" ", 2);
-            try {
-                switch (inputSplit[0]) {
-                case "bye":
-                    isExit = true;
-                    break;
-                case "list":
-                    ui.printList(tasks);
-                    break;
-                case "mark":
-                    int markIndex = Integer.parseInt(inputSplit[1]) - 1;
-                    Task taskToMark = Parser.parseTaskIndex(markIndex, tasks);
-                    tasks.markTask(taskToMark);
-                    ui.markMessage(taskToMark);
-                    break;
-                case "unmark":
-                    int unmarkIndex = Integer.parseInt(inputSplit[1]) - 1;
-                    Task taskToUnmark = Parser.parseTaskIndex(unmarkIndex, tasks);
-                    tasks.unmarkTask(taskToUnmark);
-                    ui.unmarkMessage(taskToUnmark);
-                    break;
-                case "delete":
-                    int index = Integer.parseInt(inputSplit[1]) - 1;
-                    Task taskToDelete = Parser.parseTaskIndex(index, tasks);
-                    tasks.deleteTask(taskToDelete);
-                    ui.deleteMessage(taskToDelete, tasks.getSize());
-                    break;
-                case "find":
-                    if (inputSplit.length != 2) {
-                        throw new UnspecifiedTaskException();
-                    }
-                    ui.findList(inputSplit[1], tasks.getTaskList());
-                    break;
-                default:
-                    Task taskToAdd = Parser.parseTaskCommand(input);
-                    tasks.addToList(taskToAdd);
-                    ui.addMessage(taskToAdd, tasks.getSize());
-                    break;
+    public void getResponse(String input) {
+        String[] inputSplit = input.split(" ", 2);
+        try {
+            switch (inputSplit[0]) {
+            case "bye":
+                ui.exit();
+                break;
+            case "list":
+                ui.printList(tasks);;
+                break;
+            case "mark":
+                if (inputSplit.length != 2) {
+                    throw new UnspecifiedTaskException();
                 }
-            } catch (NumberFormatException e) {
-                ui.showError("Sorry! Please input only a number");
-            } catch (RobertoException e) {
-                ui.showError(e.getMessage());
-            } catch (DateTimeParseException e) {
-                ui.showError("Sorry! Wrong date input, please enter in format YYYY-MM-DD");
-            } finally {
-                storage.saveList(tasks);
+                int markIndex = Integer.parseInt(inputSplit[1]) - 1;
+                Task taskToMark = Parser.parseTaskIndex(markIndex, tasks);
+                tasks.markTask(taskToMark);
+                ui.markMessage(taskToMark);
+                break;
+            case "unmark":
+                if (inputSplit.length != 2) {
+                    throw new UnspecifiedTaskException();
+                }
+                int unmarkIndex = Integer.parseInt(inputSplit[1]) - 1;
+                Task taskToUnmark = Parser.parseTaskIndex(unmarkIndex, tasks);
+                tasks.unmarkTask(taskToUnmark);
+                ui.unmarkMessage(taskToUnmark);
+                break;
+            case "delete":
+                if (inputSplit.length != 2) {
+                    throw new UnspecifiedTaskException();
+                }
+                int index = Integer.parseInt(inputSplit[1]) - 1;
+                Task taskToDelete = Parser.parseTaskIndex(index, tasks);
+                tasks.deleteTask(taskToDelete);
+                ui.deleteMessage(taskToDelete, tasks.getSize());
+                break;
+            case "find":
+                if (inputSplit.length != 2) {
+                    throw new UnspecifiedTaskException();
+                }
+                ui.findList(inputSplit[1], tasks.getTaskList());
+                break;
+            default:
+                Task taskToAdd = Parser.parseTaskCommand(input);
+                tasks.addToList(taskToAdd);
+                ui.addMessage(taskToAdd, tasks.getSize());
+                break;
             }
+        } catch (NumberFormatException e) {
+            ui.showError("Sorry! Please input only a number");
+        } catch (RobertoException e) {
+            ui.showError(e.getMessage());
+        } catch (DateTimeParseException e) {
+            ui.showError("Sorry! Wrong date input, please enter in format YYYY-MM-DD");
+        } finally {
+            storage.saveList(tasks);
         }
-        ui.exit();
     }
 
-    public static void main(String[] args) {
-        new Roberto("taskList.txt").run();
-    }
+
 }
