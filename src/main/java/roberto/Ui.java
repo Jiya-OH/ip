@@ -1,56 +1,44 @@
 package roberto;
 
 import java.util.List;
-import java.util.Scanner;
 
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 import task.Task;
 
 /**
  * public class Ui for user interface
  */
 public class Ui {
-    private Scanner scanner;
+    private MainWindow mainWindow;
 
     /**
      * Simple constructor for the Ui
      */
-    public Ui() {
-        scanner = new Scanner(System.in);
+    public Ui(MainWindow mainWindow) {
+        this.mainWindow = mainWindow;
     }
 
-    /**
-     * Generates a divider between communication
-     */
-    public void printLine() {
-        System.out.println("____________________________________________________________");
-    }
 
     /**
      * Introduction upon running the program
      */
     public void greet() {
-        printLine();
-        System.out.println(" Hello! I'm Roberto\n"
+        mainWindow.addRobertoDialog(" Hello! I'm Roberto\n"
                 + " What can I do for you?");
-        printLine();
     }
 
     /**
      * Send off message upon exiting the program
      */
     public void exit() {
-        printLine();
-        System.out.println(" Bye. Hope to see you again soon!");
-        printLine();
-
-    }
-
-    /**
-     * Reads user input
-     * @return Command as string
-     */
-    public String readCommand() {
-        return scanner.nextLine();
+        mainWindow.addRobertoDialog(" Bye. Hope to see you again soon!");
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        // Set the action to perform after the pause finishes
+        pause.setOnFinished(event -> {
+            mainWindow.exit();
+        });
+        pause.play();
     }
 
     /**
@@ -58,14 +46,14 @@ public class Ui {
      * @param t list of tasks
      */
     public void printList(TaskList t) {
+        StringBuilder sb = new StringBuilder();
         //initialize number for ordering
         int num = 1;
-        printLine();
-        System.out.println(" Here are the tasks in your list:");
+        sb.append(" Here are the tasks in your list:\n");
         for (Task task : t.getTaskList()) {
-            System.out.println(" " + num++ + "." + task);
+            sb.append(" ").append(num++).append(".").append(task).append("\n");
         }
-        printLine();
+        mainWindow.addRobertoDialog(sb.toString());
     }
 
     /**
@@ -73,18 +61,15 @@ public class Ui {
      * @param message error message
      */
     public void showError(String message) {
-        printLine();
-        System.out.println(message);
-        printLine();
+        mainWindow.addRobertoDialog(message);
     }
 
     /**
      * Prints the loading error message if file is either missing or corrupted
      */
     public void showLoadingError() {
-        printLine();
-        System.out.println("File either does not exist or is corrupted, generated new file for you!");
-        printLine();
+        mainWindow.addRobertoDialog("File either does not exist or is corrupted, "
+                + "generated new file for you!");
     }
 
     /**
@@ -93,11 +78,11 @@ public class Ui {
      * @param size current size of the list of task
      */
     public void deleteMessage(Task task, int size) {
-        printLine();
-        System.out.println("Noted. I've removed this task:");
-        System.out.println(task);
-        System.out.println(" Now you have " + size + " tasks in the list.");
-        printLine();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Noted. I've removed this task:\n");
+        sb.append(task).append("\n");
+        sb.append(" Now you have ").append(size).append(" tasks in the list.");
+        mainWindow.addRobertoDialog(sb.toString());
     }
 
     /**
@@ -106,11 +91,11 @@ public class Ui {
      * @param size current size of task list
      */
     public void addMessage(Task task, int size) {
-        printLine();
-        System.out.println(" Got it. I've added this task:");
-        System.out.println(task);
-        System.out.println(" Now you have " + size + " tasks in the list.");
-        printLine();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Noted. I've added this task:\n");
+        sb.append(task).append("\n");
+        sb.append(" Now you have ").append(size).append(" tasks in the list.");
+        mainWindow.addRobertoDialog(sb.toString());
     }
 
     /**
@@ -118,10 +103,10 @@ public class Ui {
      * @param task task to print in string value
      */
     public void unmarkMessage(Task task) {
-        printLine();
-        System.out.println(" Nice! I've unmarked this task as done:");
-        System.out.println("  " + task);
-        printLine();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nice! I've unmarked this task as done:\n");
+        sb.append("  ").append(task);
+        mainWindow.addRobertoDialog(sb.toString());
     }
 
     /**
@@ -129,10 +114,10 @@ public class Ui {
      * @param task task to print in string value
      */
     public void markMessage(Task task) {
-        printLine();
-        System.out.println(" Nice! I've marked this task as done:");
-        System.out.println("  " + task);
-        printLine();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nice! I've marked this task as done:\n");
+        sb.append("  ").append(task);
+        mainWindow.addRobertoDialog(sb.toString());
     }
 
     /**
@@ -141,16 +126,16 @@ public class Ui {
      * @param taskList whoe list of tasks
      */
     public void findList(String search, List<Task> taskList) {
+        StringBuilder sb = new StringBuilder();
         int num = 1;
-        printLine();
-        System.out.println("Here are the matching tasks in your list:");
+        sb.append("Here are the matching tasks in your list:\n");
         for (Task task: taskList) {
             if (task.getDescription().contains(search)) {
-                System.out.println(" " + num + "." + task);
+                sb.append(" ").append(num).append(".").append(task).append("\n");
             }
             num++;
         }
-        printLine();
+        mainWindow.addRobertoDialog(sb.toString());
     }
 
 }

@@ -97,8 +97,12 @@ public class Parser {
                 throw new UnspecifiedTaskException();
             }
             String[] descriptionE = description[1].split(" /from ");
+            if (descriptionE.length != 2) {
+                throw new UnspecifiedDateException("Sorry! Date is not specified, "
+                        + "ensure that only 1 \"/from\" and 1 \"/to\" is included after the name of the task ");
+            }
             String[] date = descriptionE[1].split(" /to ");
-            if (descriptionE.length != 2 || date.length != 2) {
+            if (date.length != 2) {
                 throw new UnspecifiedDateException("Sorry! Date is not specified, "
                         + "ensure that only 1 \"/from\" and 1 \"/to\" is included after the name of the task ");
             }
