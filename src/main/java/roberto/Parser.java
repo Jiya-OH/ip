@@ -73,6 +73,7 @@ public class Parser {
      */
     public static Task parseTaskCommand(String input) {
         String[] tokens = input.split(" ", 2);
+        assert tokens.length > 0 : "tokens should have more than 0";
         String command = tokens[0];
         switch (command) {
         case "todo":

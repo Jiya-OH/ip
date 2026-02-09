@@ -25,8 +25,11 @@ public class Storage {
      * @param saveFileString name of the file to write to
      */
     public Storage(String saveFileString) {
+        assert saveFileString != null : "saveFileString must not be null";
+        assert !saveFileString.isEmpty() : "saveFileString must not be empty";
         createDataDirectory();
         this.pathFile = Paths.get(DATA_DIRECTORY, saveFileString);
+        assert pathFile != null : "pathFile must be initialized";
     }
 
     /**
@@ -35,6 +38,10 @@ public class Storage {
      * @param tasks list of tasks to write into the save file
      */
     public void saveList(TaskList tasks) {
+        assert tasks != null : "tasks must not be null";
+        assert tasks.getTaskList() != null : "task list must not be null";
+        assert pathFile != null : "pathFile must be initialized";
+
         String saveContent = encodeTasks(tasks.getTaskList());
         try {
             Files.writeString(pathFile, saveContent);
@@ -49,13 +56,16 @@ public class Storage {
      * @throws IOException
      */
     public List<Task> loadList() throws IOException {
+        assert pathFile != null : "pathFile must be initialized";
         if (!Files.exists(pathFile)) {
             throw new FileNotFoundException();
         }
         List<Task> tasks = new ArrayList<>();
         try (Stream<String> streamTask = Files.lines(pathFile)) {
             streamTask.forEach(line -> {
+                assert line != null : "line read from file must not be null";
                 Task task = Parser.parseTaskLine(line);
+                assert task != null : "parsed task must not be null";
                 tasks.add(task);
             });
         }

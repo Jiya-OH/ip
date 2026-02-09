@@ -8,8 +8,8 @@ import roberto.Parser;
  * public class event that inherits from task
  */
 public class Events extends Task {
-    private LocalDate from;
-    private LocalDate to;
+    private LocalDate fromDate;
+    private LocalDate toDate;
 
     /**
      * Simple constructor for Events that takes in description and time
@@ -19,34 +19,36 @@ public class Events extends Task {
      */
     public Events(String description, LocalDate from, LocalDate to) {
         super(description);
-        this.from = from;
-        this.to = to;
+        this.fromDate = from;
+        this.toDate = to;
     }
 
     /**
      * Simple constructor for Events that takes in description, time, and boolean value isDone
      * For loading tasks from the save file
      * @param description name of the task
-     * @param from localdate value as start date
-     * @param to localdate value as end date
+     * @param fromDate localdate value as start date
+     * @param toDate localdate value as end date
      * @param isDone bool value to set isDone value
      */
-    public Events(String description, LocalDate from, LocalDate to, boolean isDone) {
+    public Events(String description, LocalDate fromDate, LocalDate toDate, boolean isDone) {
         super(description, isDone);
-        this.from = from;
-        this.to = to;
+        assert fromDate != null : "fromDate should not be null";
+        assert toDate != null : "toDate should not be null";
+        this.fromDate = fromDate;
+        this.toDate = toDate;
     }
 
 
     @Override
     public String toString() {
-        String fromLine = Parser.convertDate(from);
-        String toLine = Parser.convertDate(to);
+        String fromLine = Parser.convertDate(fromDate);
+        String toLine = Parser.convertDate(toDate);
         return "[E]" + super.toString() + " (from: " + fromLine + " to: " + toLine + ")";
     }
 
     @Override
     public String encodeTask() {
-        return "E" + super.encodeTask() + "//" + from.toString() + "//" + to.toString();
+        return "E" + super.encodeTask() + "//" + fromDate.toString() + "//" + toDate.toString();
     }
 }

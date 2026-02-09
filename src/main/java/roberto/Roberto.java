@@ -24,6 +24,9 @@ public class Roberto {
      * @param filePath name of the file to save to
      */
     public Roberto(String filePath, MainWindow newWindow) {
+        assert filePath != null && !filePath.isEmpty() : "filePath must be non-null and non-empty";
+        assert newWindow != null : "MainWindow must not be null";
+
         ui = new Ui(newWindow);
         storage = new Storage(filePath);
         try {
@@ -32,6 +35,8 @@ public class Roberto {
             ui.showLoadingError();
             tasks = new TaskList();
         }
+
+        assert tasks != null : "tasks must be initialized";
     }
 
     public void handleGreet() {
@@ -39,6 +44,11 @@ public class Roberto {
     }
 
     public void getResponse(String input) {
+        assert input != null : "input must not be null";
+        assert tasks != null : "tasks must be initialized";
+        assert ui != null : "ui must be initialized";
+        assert storage != null : "storage must be initialized";
+
         String[] inputSplit = input.split(" ", 2);
         assert inputSplit.length > 0 : "inputSplit should have one or more command";
         String command = inputSplit[0];
