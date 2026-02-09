@@ -24,9 +24,9 @@ public class MainWindow extends AnchorPane {
     private Roberto roberto;
 
     private final Image userImage = new Image(Objects
-            .requireNonNull(this.getClass().getResourceAsStream("/images/DaUser.png")));
+            .requireNonNull(this.getClass().getResourceAsStream("/images/incredible.png")));
     private final Image dukeImage = new Image(Objects
-            .requireNonNull(this.getClass().getResourceAsStream("/images/DaDuke.png")));
+            .requireNonNull(this.getClass().getResourceAsStream("/images/freddy.png")));
 
     @FXML
     public void initialize() {
@@ -35,6 +35,7 @@ public class MainWindow extends AnchorPane {
 
     /** Injects the Duke instance */
     public void setRoberto(Roberto r) {
+        assert r != null : "roberto should not be null";
         roberto = r;
     }
 

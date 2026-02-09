@@ -24,6 +24,8 @@ public class Storage {
      * @param saveFileString name of the file to write to
      */
     public Storage(String saveFileString) {
+        assert saveFileString != null : "saveFileString must not be null";
+        assert !saveFileString.isEmpty() : "saveFileString must not be empty";
         Path dataDirectory = Paths.get("data");
         try {
             Files.createDirectories(dataDirectory);
@@ -31,6 +33,7 @@ public class Storage {
             System.err.println("Failed to create directory: " + e.getMessage());
         }
         this.pathFile = Paths.get("data/" + saveFileString);
+        assert pathFile != null : "pathFile must be initialized";
     }
 
     /**
@@ -39,9 +42,14 @@ public class Storage {
      * @param tasks list of tasks to write into the save file
      */
     public void saveList(TaskList tasks) {
+        assert tasks != null : "tasks must not be null";
+        assert tasks.getTaskList() != null : "task list must not be null";
+        assert pathFile != null : "pathFile must be initialized";
+
         try {
             StringBuilder sb = new StringBuilder();
             for (Task t : tasks.getTaskList()) {
+                assert t != null : "task in list must not be null";
                 sb.append(t.encodeTask()).append("\n");
             }
             Files.writeString(pathFile, sb.toString());
@@ -56,12 +64,18 @@ public class Storage {
      * @throws IOException
      */
     public List<Task> loadList() throws IOException {
+        assert pathFile != null : "pathFile must be initialized";
         if (!Files.exists(pathFile)) {
             throw new FileNotFoundException();
         }
         List<Task> newList = new ArrayList<>();
         try (Stream<String> streamTask = Files.lines(pathFile)) {
-            streamTask.forEach(line -> newList.add(Parser.parseTaskLine(line)));
+            streamTask.forEach(line -> {
+                assert line != null : "line read from file must not be null";
+                Task newTask = Parser.parseTaskLine(line);
+                assert newTask != null : "parsed task must not be null";
+                newList.add(newTask);
+            });
         }
 
         return newList;

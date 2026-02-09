@@ -24,6 +24,9 @@ public class Roberto {
      * @param filePath name of the file to save to
      */
     public Roberto(String filePath, MainWindow newWindow) {
+        assert filePath != null && !filePath.isEmpty() : "filePath must be non-null and non-empty";
+        assert newWindow != null : "MainWindow must not be null";
+
         ui = new Ui(newWindow);
         storage = new Storage(filePath);
         try {
@@ -32,6 +35,8 @@ public class Roberto {
             ui.showLoadingError();
             tasks = new TaskList();
         }
+
+        assert tasks != null : "tasks must be initialized";
     }
 
     public void robertoGreet() {
@@ -39,7 +44,13 @@ public class Roberto {
     }
 
     public void getResponse(String input) {
+        assert input != null : "input must not be null";
+        assert tasks != null : "tasks must be initialized";
+        assert ui != null : "ui must be initialized";
+        assert storage != null : "storage must be initialized";
+
         String[] inputSplit = input.split(" ", 2);
+        assert inputSplit.length > 0 : "inputSplit's length should be more than 0";
         try {
             switch (inputSplit[0]) {
             case "bye":
@@ -53,6 +64,7 @@ public class Roberto {
                     throw new UnspecifiedTaskException();
                 }
                 int markIndex = Integer.parseInt(inputSplit[1]) - 1;
+                assert markIndex >= 0 : "Task index must be non-negative";
                 Task taskToMark = Parser.parseTaskIndex(markIndex, tasks);
                 tasks.markTask(taskToMark);
                 ui.markMessage(taskToMark);
@@ -62,6 +74,7 @@ public class Roberto {
                     throw new UnspecifiedTaskException();
                 }
                 int unmarkIndex = Integer.parseInt(inputSplit[1]) - 1;
+                assert unmarkIndex >= 0 : "Task index must be non-negative";
                 Task taskToUnmark = Parser.parseTaskIndex(unmarkIndex, tasks);
                 tasks.unmarkTask(taskToUnmark);
                 ui.unmarkMessage(taskToUnmark);
@@ -83,6 +96,7 @@ public class Roberto {
                 break;
             default:
                 Task taskToAdd = Parser.parseTaskCommand(input);
+                assert taskToAdd != null : "Parser must return a valid Task";
                 tasks.addToList(taskToAdd);
                 ui.addMessage(taskToAdd, tasks.getSize());
                 break;
