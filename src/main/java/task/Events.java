@@ -1,7 +1,8 @@
 package task;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
+import roberto.Parser;
 
 /**
  * public class event that inherits from task
@@ -41,8 +42,8 @@ public class Events extends Task {
 
     @Override
     public String toString() {
-        String fromLine = fromDate.format(DateTimeFormatter.ofPattern("MMM dd yyyy"));
-        String toLine = toDate.format(DateTimeFormatter.ofPattern("MMM dd yyyy"));
+        String fromLine = Parser.convertDate(fromDate);
+        String toLine = Parser.convertDate(toDate);
         return "[E]" + super.toString() + " (from: " + fromLine + " to: " + toLine + ")";
     }
 

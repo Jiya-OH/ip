@@ -25,7 +25,7 @@ public class Main extends Application {
             stage.setMinWidth(417);
             Roberto roberto = new Roberto("taskList.txt", fxmlLoader.<MainWindow>getController());
             fxmlLoader.<MainWindow>getController().setRoberto(roberto); // inject the Duke instance
-            roberto.robertoGreet();
+            roberto.handleGreet();
             stage.show();
             stage.setTitle("Roberto");
         } catch (IOException e) {
