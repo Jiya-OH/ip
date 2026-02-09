@@ -12,6 +12,8 @@ public class Task {
      * @param description name of the task
      */
     public Task(String description) {
+        assert description != null : "description should not be null";
+        assert !description.isEmpty() : "search must not be empty";
         this.description = description;
         this.isDone = false;
     }
@@ -22,6 +24,8 @@ public class Task {
      * @param isDone bool value to set isDone value
      */
     public Task(String description, boolean isDone) {
+        assert description != null : "description should not be null";
+        assert !description.isEmpty() : "search must not be empty";
         this.description = description;
         this.isDone = isDone;
     }
@@ -58,6 +62,8 @@ public class Task {
     }
 
     public String getDescription() {
+        assert description != null : "description should not be null";
+        assert !description.isEmpty() : "search must not be empty";
         return this.description;
     }
 }

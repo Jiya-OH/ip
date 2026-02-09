@@ -7,16 +7,17 @@ import java.time.format.DateTimeFormatter;
  * public class deadline that inherits from task
  */
 public class Deadline extends Task {
-    private LocalDate by;
+    private LocalDate byDate;
 
     /**
      * Simple constructor for Deadline that takes in description and time
      * @param description name of the task
-     * @param by localdate value as deadline
+     * @param byDate localdate value as deadline
      */
-    public Deadline(String description, LocalDate by) {
+    public Deadline(String description, LocalDate byDate) {
         super(description);
-        this.by = by;
+        assert byDate != null : "byDate should not be null";
+        this.byDate = byDate;
     }
 
     /**
@@ -28,18 +29,18 @@ public class Deadline extends Task {
      */
     public Deadline(String description, LocalDate by, boolean isDone) {
         super(description, isDone);
-        this.by = by;
+        this.byDate = by;
     }
 
 
     @Override
     public String toString() {
-        String byLine = by.format(DateTimeFormatter.ofPattern("MMM dd yyyy"));
+        String byLine = byDate.format(DateTimeFormatter.ofPattern("MMM dd yyyy"));
         return "[D]" + super.toString() + " (by: " + byLine + ")";
     }
 
     @Override
     public String encodeTask() {
-        return "D" + super.encodeTask() + "//" + by.toString();
+        return "D" + super.encodeTask() + "//" + byDate.toString();
     }
 }

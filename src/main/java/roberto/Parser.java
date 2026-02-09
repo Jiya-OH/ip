@@ -72,7 +72,7 @@ public class Parser {
      */
     public static Task parseTaskCommand(String input) {
         String[] description = input.split(" ", 2);
-
+        assert description.length > 0;
         Task newTask;
         switch (description[0]) {
         case "todo":
@@ -120,6 +120,7 @@ public class Parser {
      * @return a LocalDate
      */
     public static LocalDate parseLocalDate(String dateString) {
+        assert !dateString.isEmpty();
         return LocalDate.parse(dateString, formatter);
     }
 
