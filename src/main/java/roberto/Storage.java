@@ -16,6 +16,7 @@ import task.Task;
  * Public class storage to store task lists into file
  */
 public class Storage {
+    private static final String DATA_DIRECTORY = "data";
     private Path pathFile;
 
     /**
@@ -24,13 +25,8 @@ public class Storage {
      * @param saveFileString name of the file to write to
      */
     public Storage(String saveFileString) {
-        Path dataDirectory = Paths.get("data");
-        try {
-            Files.createDirectories(dataDirectory);
-        } catch (IOException e) {
-            System.err.println("Failed to create directory: " + e.getMessage());
-        }
-        this.pathFile = Paths.get("data/" + saveFileString);
+        createDataDirectory();
+        this.pathFile = Paths.get(DATA_DIRECTORY, saveFileString);
     }
 
     /**
@@ -39,12 +35,9 @@ public class Storage {
      * @param tasks list of tasks to write into the save file
      */
     public void saveList(TaskList tasks) {
+        String saveContent = encodeTasks(tasks.getTaskList());
         try {
-            StringBuilder sb = new StringBuilder();
-            for (Task t : tasks.getTaskList()) {
-                sb.append(t.encodeTask()).append("\n");
-            }
-            Files.writeString(pathFile, sb.toString());
+            Files.writeString(pathFile, saveContent);
         } catch (IOException e) {
             System.out.println("Error! Can't save task list to file");
         }
@@ -59,12 +52,41 @@ public class Storage {
         if (!Files.exists(pathFile)) {
             throw new FileNotFoundException();
         }
-        List<Task> newList = new ArrayList<>();
+        List<Task> tasks = new ArrayList<>();
         try (Stream<String> streamTask = Files.lines(pathFile)) {
-            streamTask.forEach(line -> newList.add(Parser.parseTaskLine(line)));
+            streamTask.forEach(line -> {
+                Task task = Parser.parseTaskLine(line);
+                tasks.add(task);
+            });
         }
 
-        return newList;
+        return tasks;
     }
 
+    /**
+     * Create data directory named "data" if it is missing.
+     */
+    private void createDataDirectory() {
+        try {
+            Files.createDirectories(Paths.get(DATA_DIRECTORY));
+        } catch (IOException e) {
+            System.err.println("Failed to create data directory: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Creates encoded string based on the list of tasks to save to file
+     * @param tasks list of tasks to encode
+     * @return encoded string
+     */
+    private String encodeTasks(List<Task> tasks) {
+        StringBuilder builder = new StringBuilder();
+
+        for (Task task : tasks) {
+            assert task != null : "task must not be null";
+            builder.append(task.encodeTask()).append(System.lineSeparator());
+        }
+
+        return builder.toString();
+    }
 }

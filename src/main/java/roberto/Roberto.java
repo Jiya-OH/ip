@@ -34,57 +34,36 @@ public class Roberto {
         }
     }
 
-    public void robertoGreet() {
+    public void handleGreet() {
         ui.greet();
     }
 
     public void getResponse(String input) {
         String[] inputSplit = input.split(" ", 2);
+        assert inputSplit.length > 0 : "inputSplit should have one or more command";
+        String command = inputSplit[0];
         try {
-            switch (inputSplit[0]) {
+            switch (command) {
             case "bye":
                 ui.exit();
                 break;
             case "list":
-                ui.printList(tasks);;
+                ui.printList(tasks);
                 break;
             case "mark":
-                if (inputSplit.length != 2) {
-                    throw new UnspecifiedTaskException();
-                }
-                int markIndex = Integer.parseInt(inputSplit[1]) - 1;
-                Task taskToMark = Parser.parseTaskIndex(markIndex, tasks);
-                tasks.markTask(taskToMark);
-                ui.markMessage(taskToMark);
+                handleMark(inputSplit);
                 break;
             case "unmark":
-                if (inputSplit.length != 2) {
-                    throw new UnspecifiedTaskException();
-                }
-                int unmarkIndex = Integer.parseInt(inputSplit[1]) - 1;
-                Task taskToUnmark = Parser.parseTaskIndex(unmarkIndex, tasks);
-                tasks.unmarkTask(taskToUnmark);
-                ui.unmarkMessage(taskToUnmark);
+                handleUnmark(inputSplit);
                 break;
             case "delete":
-                if (inputSplit.length != 2) {
-                    throw new UnspecifiedTaskException();
-                }
-                int index = Integer.parseInt(inputSplit[1]) - 1;
-                Task taskToDelete = Parser.parseTaskIndex(index, tasks);
-                tasks.deleteTask(taskToDelete);
-                ui.deleteMessage(taskToDelete, tasks.getSize());
+                handleDelete(inputSplit);
                 break;
             case "find":
-                if (inputSplit.length != 2) {
-                    throw new UnspecifiedTaskException();
-                }
-                ui.findList(inputSplit[1], tasks.getTaskList());
+                handleFind(inputSplit);
                 break;
             default:
-                Task taskToAdd = Parser.parseTaskCommand(input);
-                tasks.addToList(taskToAdd);
-                ui.addMessage(taskToAdd, tasks.getSize());
+                handleAdd(input);
                 break;
             }
         } catch (NumberFormatException e) {
@@ -96,6 +75,53 @@ public class Roberto {
         } finally {
             storage.saveList(tasks);
         }
+    }
+
+    private void handleMark(String[] inputSplit) throws RobertoException {
+        Task task = getTaskFromIndex(inputSplit);
+        tasks.markTask(task);
+        ui.markMessage(task);
+    }
+
+    private void handleUnmark(String[] inputSplit) throws RobertoException {
+        Task task = getTaskFromIndex(inputSplit);
+        tasks.unmarkTask(task);
+        ui.unmarkMessage(task);
+    }
+
+    private void handleDelete(String[] inputSplit) throws RobertoException {
+        Task task = getTaskFromIndex(inputSplit);
+        tasks.deleteTask(task);
+        ui.deleteMessage(task, tasks.getSize());
+    }
+
+    private void handleFind(String[] inputSplit) throws RobertoException {
+        if (inputSplit.length != 2) {
+            throw new UnspecifiedTaskException();
+        }
+        ui.findList(inputSplit[1], tasks.getTaskList());
+    }
+
+    private void handleAdd(String input) throws RobertoException {
+        Task task = Parser.parseTaskCommand(input);
+        assert task != null;
+
+        tasks.addToList(task);
+        ui.addMessage(task, tasks.getSize());
+    }
+
+    private Task getTaskFromIndex(String[] inputSplit) throws RobertoException {
+        if (inputSplit.length != 2) {
+            throw new UnspecifiedTaskException();
+        }
+
+        int index = Integer.parseInt(inputSplit[1]) - 1;
+        assert index >= 0;
+
+        Task task = Parser.parseTaskIndex(index, tasks);
+        assert task != null;
+
+        return task;
     }
 
 

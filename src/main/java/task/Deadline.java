@@ -1,7 +1,8 @@
 package task;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
+import roberto.Parser;
 
 /**
  * public class deadline that inherits from task
@@ -34,7 +35,7 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        String byLine = by.format(DateTimeFormatter.ofPattern("MMM dd yyyy"));
+        String byLine = Parser.convertDate(by);
         return "[D]" + super.toString() + " (by: " + byLine + ")";
     }
 
