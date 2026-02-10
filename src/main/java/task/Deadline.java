@@ -33,6 +33,16 @@ public class Deadline extends Task {
         this.byDate = by;
     }
 
+    /**
+     * Simple constructor for Deadline that copies from other instance
+     * @param other other instance of task
+     */
+    public Deadline(Deadline other) {
+        super(other);
+        this.byDate = other.byDate;
+    }
+
+
 
     @Override
     public String toString() {

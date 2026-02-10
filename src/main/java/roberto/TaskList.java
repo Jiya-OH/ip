@@ -2,6 +2,7 @@ package roberto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import exceptions.TaskDoesNotExistException;
 import task.Task;
@@ -11,30 +12,35 @@ import task.Task;
  * public class TaskList to store list of tasks
  */
 public class TaskList {
-    private List<Task> taskList;
+    private List<Task> tasks;
+    private Stack<List<Task>> historyOfTasks;
 
 
     /**
      * Simple constructor for TaskList
      */
     public TaskList() {
-        taskList = new ArrayList<>();
+        this.tasks = new ArrayList<>();
+        this.historyOfTasks = new Stack<>();
+        historyOfTasks.push(tasks);
     }
 
     /**
      * Simple constructor for TaskList that takes in List of tasks
-     * @param taskList list of tasks to be added in
+     * @param tasks list of tasks to be added in
      */
-    public TaskList(List<Task> taskList) {
-        this.taskList = taskList;
+    public TaskList(List<Task> tasks) {
+        this.tasks = tasks;
+        this.historyOfTasks = new Stack<>();
+        historyOfTasks.push(tasks);
     }
 
     /**
      * Gets private field taskList
      * @return Current instance's list of task
      */
-    public List<Task> getTaskList() {
-        return taskList;
+    public List<Task> getTasks() {
+        return tasks;
     }
 
     /**
@@ -42,7 +48,7 @@ public class TaskList {
      * @return Current instance's list of task size in integer
      */
     public int getSize() {
-        return taskList.size();
+        return tasks.size();
     }
 
     /**
@@ -50,7 +56,7 @@ public class TaskList {
      * @param newTask task to be added
      */
     public void addToList(Task newTask) {
-        taskList.add(newTask);
+        tasks.add(newTask);
     }
 
     /**
@@ -58,7 +64,7 @@ public class TaskList {
      * @param task task to be deleted
      */
     public void deleteTask(Task task) {
-        boolean removeBool = taskList.remove(task);
+        boolean removeBool = tasks.remove(task);
         if (!removeBool) {
             throw new TaskDoesNotExistException(0);
         }
@@ -72,5 +78,24 @@ public class TaskList {
         task.markAsDone(false);
     }
 
+    /**
+     * Pops the list of tasks from its previous state
+     */
+    public void undoTaskFromHistory() {
+        if (!historyOfTasks.isEmpty()) {
+            tasks = historyOfTasks.pop();
+        }
+    }
 
+    /**
+     * Pushes the current state of task list to history
+     */
+    public void saveTaskToHistory() {
+        List<Task> snapshotTasks = new ArrayList<>();
+        for (Task task : tasks) {
+            snapshotTasks.add(new Task(task));
+        }
+        historyOfTasks.push(snapshotTasks);
+    }
 }
+

@@ -49,7 +49,7 @@ public class MainWindow extends AnchorPane {
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage)
         );
-        roberto.getResponse(input);
+        roberto.getResponse(input, false);
         userInput.clear();
     }
 

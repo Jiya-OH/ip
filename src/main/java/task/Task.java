@@ -31,6 +31,15 @@ public class Task {
     }
 
     /**
+     * Simple constructor for Task that is copied from the other task
+     * @param otherTask instance of other Task
+     */
+    public Task(Task otherTask) {
+        this.description = otherTask.description;
+        this.isDone = otherTask.isDone;
+    }
+
+    /**
      * Returns either 'X' or ' ' depending on whether the task is marked
      * @return either 'X' or ' '
      */

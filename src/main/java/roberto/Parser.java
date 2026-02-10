@@ -60,10 +60,10 @@ public class Parser {
      * @return a new task
      */
     public static Task parseTaskIndex(int index, TaskList t) {
-        if (index < 0 || index > t.getTaskList().size() - 1) {
+        if (index < 0 || index > t.getTasks().size() - 1) {
             throw new TaskDoesNotExistException(index);
         }
-        return t.getTaskList().get(index);
+        return t.getTasks().get(index);
     }
 
     /**

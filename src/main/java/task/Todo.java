@@ -22,6 +22,14 @@ public class Todo extends Task {
         super(description, isDone);
     }
 
+    /**
+     * Simple constructor for Todo that copies from other instance
+     * @param other other instance of task
+     */
+    public Todo(Todo other) {
+        super(other);
+    }
+
     @Override
     public String toString() {
         return "[T]" + super.toString();

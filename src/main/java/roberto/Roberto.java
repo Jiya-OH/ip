@@ -2,6 +2,7 @@ package roberto;
 
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
+import java.util.Stack;
 
 import exceptions.RobertoException;
 import exceptions.UnspecifiedTaskException;
@@ -16,6 +17,7 @@ public class Roberto {
     private TaskList tasks;
     private final Ui ui;
     private final Storage storage;
+    private Stack<String> commands;
 
 
     /**
@@ -29,6 +31,7 @@ public class Roberto {
 
         ui = new Ui(newWindow);
         storage = new Storage(filePath);
+        commands = new Stack<>();
         try {
             tasks = new TaskList(storage.loadList());
         } catch (IOException | RobertoException e) {
@@ -43,11 +46,13 @@ public class Roberto {
         ui.greet();
     }
 
-    public void getResponse(String input) {
+    public void getResponse(String input, boolean isUndo) {
         assert input != null : "input must not be null";
         assert tasks != null : "tasks must be initialized";
         assert ui != null : "ui must be initialized";
         assert storage != null : "storage must be initialized";
+
+        boolean isValidToSave = true;
 
         String[] inputSplit = input.split(" ", 2);
         assert inputSplit.length > 0 : "inputSplit should have one or more command";
@@ -56,9 +61,11 @@ public class Roberto {
             switch (command) {
             case "bye":
                 ui.exit();
+                isValidToSave = false;
                 break;
             case "list":
                 ui.printList(tasks);
+                isValidToSave = false;
                 break;
             case "mark":
                 handleMark(inputSplit);
@@ -71,6 +78,11 @@ public class Roberto {
                 break;
             case "find":
                 handleFind(inputSplit);
+                isValidToSave = false;
+                break;
+            case "undo":
+                handleUndo();
+                isValidToSave = false;
                 break;
             default:
                 handleAdd(input);
@@ -78,28 +90,41 @@ public class Roberto {
             }
         } catch (NumberFormatException e) {
             ui.showError("Sorry! Please input only a number");
+            isValidToSave = false;
         } catch (RobertoException e) {
             ui.showError(e.getMessage());
+            isValidToSave = false;
         } catch (DateTimeParseException e) {
             ui.showError("Sorry! Wrong date input, please enter in format YYYY-MM-DD");
+            isValidToSave = false;
         } finally {
             storage.saveList(tasks);
+            saveCommand(input, isValidToSave, isUndo);
+        }
+    }
+
+    private void saveCommand(String input, boolean isValidToSave, boolean isUndo) {
+        if (isValidToSave && !isUndo) {
+            commands.push(input);
         }
     }
 
     private void handleMark(String[] inputSplit) throws RobertoException {
+        tasks.saveTaskToHistory();
         Task task = getTaskFromIndex(inputSplit);
         tasks.markTask(task);
         ui.markMessage(task);
     }
 
     private void handleUnmark(String[] inputSplit) throws RobertoException {
+        tasks.saveTaskToHistory();
         Task task = getTaskFromIndex(inputSplit);
         tasks.unmarkTask(task);
         ui.unmarkMessage(task);
     }
 
     private void handleDelete(String[] inputSplit) throws RobertoException {
+        tasks.saveTaskToHistory();
         Task task = getTaskFromIndex(inputSplit);
         tasks.deleteTask(task);
         ui.deleteMessage(task, tasks.getSize());
@@ -109,15 +134,26 @@ public class Roberto {
         if (inputSplit.length != 2) {
             throw new UnspecifiedTaskException();
         }
-        ui.findList(inputSplit[1], tasks.getTaskList());
+        ui.findList(inputSplit[1], tasks.getTasks());
     }
 
     private void handleAdd(String input) throws RobertoException {
+        tasks.saveTaskToHistory();
         Task task = Parser.parseTaskCommand(input);
         assert task != null;
-
         tasks.addToList(task);
         ui.addMessage(task, tasks.getSize());
+    }
+
+    private void handleUndo() {
+        if (commands.isEmpty()) {
+            ui.showError("Commands are empty!");
+            return;
+        }
+        String input = commands.pop();
+        ui.showUndoMessage(input);
+        tasks.undoTaskFromHistory();
+        ui.printList(tasks);
     }
 
     private Task getTaskFromIndex(String[] inputSplit) throws RobertoException {

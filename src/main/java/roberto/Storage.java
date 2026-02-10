@@ -39,10 +39,10 @@ public class Storage {
      */
     public void saveList(TaskList tasks) {
         assert tasks != null : "tasks must not be null";
-        assert tasks.getTaskList() != null : "task list must not be null";
+        assert tasks.getTasks() != null : "task list must not be null";
         assert pathFile != null : "pathFile must be initialized";
 
-        String saveContent = encodeTasks(tasks.getTaskList());
+        String saveContent = encodeTasks(tasks.getTasks());
         try {
             Files.writeString(pathFile, saveContent);
         } catch (IOException e) {

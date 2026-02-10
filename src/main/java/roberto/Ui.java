@@ -54,7 +54,7 @@ public class Ui {
         //initialize number for ordering
         int num = 1;
         sb.append(" Here are the tasks in your list:\n");
-        for (Task task : taskList.getTaskList()) {
+        for (Task task : taskList.getTasks()) {
             sb.append(" ").append(num++).append(".").append(task).append("\n");
         }
         mainWindow.addRobertoDialog(sb.toString());
@@ -67,6 +67,15 @@ public class Ui {
     public void showError(String message) {
         assert mainWindow != null : "mainWindow must be initialized";
         mainWindow.addRobertoDialog(message);
+    }
+
+    /**
+     * Prints out undo message
+     * @param message undo message
+     */
+    public void showUndoMessage(String message) {
+        assert mainWindow != null : "mainWindow must be initialized";
+        mainWindow.addRobertoDialog("Undoing command:\n" + message);
     }
 
     /**

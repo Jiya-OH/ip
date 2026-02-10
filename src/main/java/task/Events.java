@@ -24,6 +24,16 @@ public class Events extends Task {
     }
 
     /**
+     * Simple constructor for Events that copies from other instance
+     * @param other other instance of task
+     */
+    public Events(Events other) {
+        super(other);
+        this.fromDate = other.fromDate;
+        this.toDate = other.toDate;
+    }
+
+    /**
      * Simple constructor for Events that takes in description, time, and boolean value isDone
      * For loading tasks from the save file
      * @param description name of the task
