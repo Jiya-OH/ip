@@ -1,29 +1,34 @@
-# Duke User Guide
+# Roberto User Guide
 
-// Update the title above to match the actual product name
+![Ui.png.png](Ui.png.png)
 
-// Product screenshot goes here
+Manage your tasks with Roberto!
 
-// Product intro goes here
+## Adding Tasks
 
-## Adding deadlines
+Enter a single a line of command to allow Roberto to store
+tasks into a file
 
-// Describe the action and its outcome.
+Types of tasks available:
+- Todo
+- Deadline
+- Events
 
-// Give examples of usage
 
-Example: `keyword (optional arguments)`
-
-// A description of the expected outcome goes here
+Example: `deadline finish homework /by 2026-02-20`
 
 ```
-expected output
+Noted. I've added this task:
+[D][ ] finish homework (by: Feb 20 2026)
+Now you have 1 tasks in the list
 ```
 
-## Feature ABC
+## Updating tasks
+Mark/unmark tasks by index to update the status of your tasks
 
-// Feature details
+Example: `mark 1`
 
-## Feature XYZ
+## Undo
+Restore stored tasks to its previous state to remove mistakes
 
-// Feature details
+Example: `undo`
