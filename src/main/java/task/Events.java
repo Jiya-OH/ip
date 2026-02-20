@@ -33,6 +33,11 @@ public class Events extends Task {
         this.toDate = other.toDate;
     }
 
+    @Override
+    public Task copy() {
+        return new Events(this); // Uses existing copy constructor
+    }
+
     /**
      * Simple constructor for Events that takes in description, time, and boolean value isDone
      * For loading tasks from the save file

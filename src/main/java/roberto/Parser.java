@@ -18,8 +18,8 @@ import task.Todo;
  * Public class for parser, to parse strings into various class instances
  */
 public class Parser {
-    private static DateTimeFormatter INPUTDATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static DateTimeFormatter OUTPUTDATE_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy");
+    private static final DateTimeFormatter INPUTDATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter OUTPUTDATE_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy");
     private static final String DELIMITER = "//";
 
     public Parser() {

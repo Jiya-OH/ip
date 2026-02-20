@@ -22,6 +22,11 @@ public class Todo extends Task {
         super(description, isDone);
     }
 
+    @Override
+    public Task copy() {
+        return new Todo(this); // Uses existing copy constructor
+    }
+
     /**
      * Simple constructor for Todo that copies from other instance
      * @param other other instance of task

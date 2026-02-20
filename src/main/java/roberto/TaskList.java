@@ -93,7 +93,7 @@ public class TaskList {
     public void saveTaskToHistory() {
         List<Task> snapshotTasks = new ArrayList<>();
         for (Task task : tasks) {
-            snapshotTasks.add(new Task(task));
+            snapshotTasks.add(task.copy());
         }
         historyOfTasks.push(snapshotTasks);
     }

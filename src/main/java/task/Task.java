@@ -3,7 +3,7 @@ package task;
 /**
  * public class task that stores description and isDone
  */
-public class Task {
+public abstract class Task {
     protected String description;
     protected boolean isDone;
 
@@ -56,6 +56,12 @@ public class Task {
         int isDone = this.isDone ? 1 : 0;
         return "//" + isDone + "//" + description;
     }
+
+    /**
+     * Creates a new copy of the same instance
+     * @return same Task instance
+     */
+    public abstract Task copy();
 
     /**
      * Marks a task as unmarked or marked

@@ -99,12 +99,12 @@ public class Roberto {
             isValidToSave = false;
         } finally {
             storage.saveList(tasks);
-            saveCommand(input, isValidToSave, isUndo);
+            recordCommandIfNeeded(input, isValidToSave, isUndo);
         }
     }
 
-    private void saveCommand(String input, boolean isValidToSave, boolean isUndo) {
-        if (isValidToSave && !isUndo) {
+    private void recordCommandIfNeeded(String input, boolean shouldRecord, boolean isUndo) {
+        if (shouldRecord && !isUndo) {
             commands.push(input);
         }
     }

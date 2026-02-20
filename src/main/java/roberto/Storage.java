@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import task.Task;
@@ -90,13 +91,8 @@ public class Storage {
      * @return encoded string
      */
     private String encodeTasks(List<Task> tasks) {
-        StringBuilder builder = new StringBuilder();
-
-        for (Task task : tasks) {
-            assert task != null : "task must not be null";
-            builder.append(task.encodeTask()).append(System.lineSeparator());
-        }
-
-        return builder.toString();
+        return tasks.stream()
+                .map(Task::encodeTask)
+                .collect(Collectors.joining(System.lineSeparator()));
     }
 }

@@ -127,7 +127,7 @@ public class Ui {
         assert mainWindow != null : "mainWindow must be initialized";
         assert task != null : "task must not be null";
         StringBuilder sb = new StringBuilder();
-        sb.append("Nice! I've unmarked this task as done:\n");
+        sb.append("OK, I've marked this task as not done yet:\n");
         sb.append("  ").append(task);
         mainWindow.addRobertoDialog(sb.toString());
     }
@@ -158,11 +158,10 @@ public class Ui {
         StringBuilder sb = new StringBuilder();
         int num = 1;
         sb.append("Here are the matching tasks in your list:\n");
-        for (Task task: taskList) {
+        for (Task task : taskList) {
             if (task.getDescription().contains(search)) {
-                sb.append(" ").append(num).append(".").append(task).append("\n");
+                sb.append(" ").append(num++).append(".").append(task).append("\n");
             }
-            num++;
         }
         mainWindow.addRobertoDialog(sb.toString());
     }

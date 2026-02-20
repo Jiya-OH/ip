@@ -21,6 +21,11 @@ public class Deadline extends Task {
         this.byDate = byDate;
     }
 
+    @Override
+    public Task copy() {
+        return new Deadline(this); // Uses existing copy constructor
+    }
+
     /**
      * Simple constructor for Deadline that takes in description, time, and isDone as bool
      * For loading tasks from the save file

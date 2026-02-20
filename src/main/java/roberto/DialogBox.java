@@ -26,7 +26,7 @@ public class DialogBox extends HBox {
 
     private DialogBox(String text, Image img) {
         assert text != null : "text should not be null";
-        assert !text.isEmpty() : "text should not be empty";
+        assert !text.isBlank() : "text should not be empty";
         assert img != null : "tmg should not be null";
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
@@ -35,7 +35,7 @@ public class DialogBox extends HBox {
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to load DialogBox FXML", e);
         }
         dialog.setText(text);
         displayPicture.setImage(img);
